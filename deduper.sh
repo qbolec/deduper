@@ -21,7 +21,7 @@ grep '^Duplicate:' | # now focus on lines with Duplicates
 cut -d ' ' -f 3- | # remove first two fields delimited by space (label and hash), keep just the filename (which might contain spaces)
 tee duplicates.filenames | # save result at this stage (just the filenames to delete, one per line)
 tr '\n' '\0' | # change the newline delimiter to \0 (hopefully there are no newlines in filenames)
-xargs -0 -n100 ls -1 -s --block-size=1 | # red filenames separated by '\0', group them by 100, list size expressed in bytes of each file in separate line
+xargs -0 -n100 ls -1 -s --block-size=1 | # read filenames separated by '\0', group them by 100, list size expressed in bytes of each file in separate line
 sort -nr -k1,1 | # sort by first column numerically in reverse (descending) order
 tee duplicates.sizes | # save result at this stage (size and filename sorted by size descending)
 awk '{s+=$1} END {printf "Total gain %.3f GB\n", s/1024/1024/1024}' # sum the sizes of all duplicates and report them in GB with 3 places after comma (MB precission)
