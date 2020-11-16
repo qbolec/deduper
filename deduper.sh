@@ -3,7 +3,7 @@ echo searching for duplicates in "$@";
 
 find "$@" -type f -size +1M -print0 | # find large files and print their name separated by \0 char
 xargs -0 -n100 md5sum | # read filenames separated by \0, group them by at most 100 and compute their hashes
-sed -r 's/([a-f0-9]{32})[* ]*/\1 /g' | # md5sum might've put * in between hash and filename
+sed -r 's/^([a-f0-9]{32})[* ]*/\1 /g' | # md5sum might've put * in between hash and filename
 sort -s -k1,1 | # sort by hash, keeping the original relative order of files with same hash 
 awk '''
 {
